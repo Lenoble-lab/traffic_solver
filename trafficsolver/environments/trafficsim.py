@@ -43,9 +43,32 @@ class TrafficSim:
         self.action_space = ActionSpace(4 * self.network.n_inter)
         self.observation_space = ObservationSpace(self.network.n_inter * (self.network.h_length + self.network.v_length + 2))
 
+        self.current_timestep = 0
+
+        self.horizontal_car_positions = np.zeros((network.h_lenght, network.n_inter))
+        self.vertical_car_positions = np.zeros((network.v_lenght, network.n_inter))
+
+        self.horizontal_car_positions_last = copy.deepcopy(self.horizontal_car_positions) #For rendering purposes only
+        self.vertical_car_positions_last = copy.deepcopy(self.vertical_car_positions) #For rendering purposes only
+
+        self.traffic_light_state = np.zeros(network.n_inter)
+        self.car_state = np.concatenate(self.horizontale_car_position, 
+                                        self.vertical_car_position)
+
+      
         self.viewer = None
 
     def step(self, action):
+        done = False
+        self.current_timestep += 1
+        reward = 0  
+
+        #Check if time is up
+        if self.current_timestep >= self.MAX_TIMESTEPS:
+            done = True
+
+        
+
 
         return state, reward, done, {}
 
