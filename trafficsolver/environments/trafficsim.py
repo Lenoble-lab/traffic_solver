@@ -1,25 +1,33 @@
+"""
+trafficsim.py
+Romain, Clément et Loïc
+28/09/2019
+"""
+
+# Imports
 import numpy as np
 import environments.rendering as rendering
 import copy
 
-class TrafficSim():
+
+class TrafficSim:
 
     def __init__(self):
 
-        class action_space():
-            def __init__(self,n_actions): 
+        class ActionSpace:
+            def __init__(self, n_actions):
                 self.n = n_actions
 
-        class observation_space():
-            def __init__(self,n_features): 
+        class ObservationSpace:
+            def __init__(self, n_features):
                 self.shape = [n_features]
 
-        self.action_space = action_space(2)
-        self.observation_space = observation_space(4)
+        self.action_space = ActionSpace(2)
+        self.observation_space = ObservationSpace(4)
 
         self.viewer = None
 
-    def step(self,action):
+    def step(self, action):
 
         return state, reward, done, {}
 
@@ -27,7 +35,7 @@ class TrafficSim():
 
         return state
 
-    def seed(self,seed):
+    def seed(self, seed):
         return
 
     def render(self):
