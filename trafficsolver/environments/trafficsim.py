@@ -97,7 +97,7 @@ class TrafficSim:
                 elif j == (self.network.h_length - 2) and self.network.h_lights[i] == 1:
                     self.network.h_cars[i, j] = 0
                     self.network.h_cars[i, j+1] = 1
-                else:
+                elif j < (self.network.h_length - 2) and self.network.h_cars[i, j] == 1:
                     self.network.h_cars[i, j] = 0
                     self.network.h_cars[i, j+1] = 1
 
@@ -112,7 +112,7 @@ class TrafficSim:
                 elif j == (self.network.v_length - 2) and self.network.v_lights[i] == 1:
                     self.network.v_cars[i, j] = 0
                     self.network.v_cars[i, j+1] = 1
-                else:
+                elif j < (self.network.v_length - 2) and self.network.v_cars[i, j] == 1:
                     self.network.v_cars[i, j] = 0
                     self.network.v_cars[i, j+1] = 1
 
@@ -130,10 +130,10 @@ class TrafficSim:
                 self.network.v_cars[i, 0] = 1
 
         # final state
-        state = np.concatenate(self.network.h_cars,
-                               self.network.v_cars,
+        state = np.concatenate((self.network.h_cars.reshape(self.network.n_inter * self.network.h_length),
+                               self.network.v_cars.reshape(self.network.n_inter * self.network.v_length),
                                self.network.h_lights,
-                               self.network.h_lights)
+                               self.network.h_lights))
 
         return state, reward, done, {}
 
@@ -141,10 +141,10 @@ class TrafficSim:
 
         self.current_timestep = 0
         self.network = NetworkStructure(self.n_inter, self.h_length, self.v_length)
-        state = np.concatenate(self.network.h_cars,
-                               self.network.v_cars,
+        state = np.concatenate((self.network.h_cars.reshape(self.network.n_inter * self.network.h_length),
+                               self.network.v_cars.reshape(self.network.n_inter * self.network.v_length),
                                self.network.h_lights,
-                               self.network.h_lights)
+                               self.network.h_lights))
 
         return state
 
@@ -153,34 +153,26 @@ class TrafficSim:
 
     def render(self):
        
-        road_length =300
-
+        road_length = 300
         screen_width = 1200
         screen_height = 800
-        
-
         carwidth = 30
         carheight = 30
 
         traffic_light_radius = 10
 
-        l,r,t,b = -carwidth/2, carwidth/2, carheight/2, -carheight/2
+        l, r, t, b = -carwidth/2, carwidth/2, carheight/2, -carheight/2
 
         if self.viewer is None:
             self.viewer = rendering.Viewer(screen_width, screen_height)
-        
-        tab_horiz = self.red_car_positions_last[:road_case]
-        tab_vertic = self.blue_car_positions_last[:road_case]
-            
 
-
-        #flux horizontaux
+        # flux horizontaux
         for s in range(self.n_inter):
             for i in range(self.h_length):
                 if self.h_cars[s][i] == 1:
 
-                    car = rendering.FilledPolygon([(l,b), (l,t), (r,t), (r,b)])
-                    car.set_color(1,0,0)
+                    car = rendering.FilledPolygon([(l, b), (l, t), (r, t), (r, b)])
+                    car.set_color(1, 0, 0)
 
                     cartrans = rendering.Transform()
                     car.add_attr(cartrans)
@@ -188,11 +180,11 @@ class TrafficSim:
 
                     self.viewer.add_onetime(car)
 
-        #flux verticaux
+        # flux verticaux
         for s in range(self.n_inter):
             for i in range(self.v_length):
-                if self.v_cars[s][i]== 1:
-                    car = rendering.FilledPolygon([(l,b), (l,t), (r,t), (r,b)])
+                if self.v_cars[s][i] == 1:
+                    car = rendering.FilledPolygon([(l, b), (l, t), (r, t), (r, b)])
                     car.set_color(0,0.3*s,0.2*s)
 
                     cartrans = rendering.Transform()
@@ -201,14 +193,13 @@ class TrafficSim:
 
                     self.viewer.add_onetime(car)
         
-        #traffic light
-
+        # traffic light
         for s in range(self.n_inter):
             light1 = rendering.make_circle(traffic_light_radius)
             if self.h_lights[s] == 0:
-                light1.set_color(0,1,0)
+                light1.set_color(0, 1, 0)
             else:
-                light1.set_color(1,0,0)
+                light1.set_color(1, 0, 0)
             lighttrans = rendering.Transform()
             light1.add_attr(lighttrans)
             lighttrans.set_translation(220+s*road_length, 350)
@@ -216,36 +207,35 @@ class TrafficSim:
 
             light2 = rendering.make_circle(traffic_light_radius)
             if self.v_lights == 0:
-                light2.set_color(0,1,0)
+                light2.set_color(0, 1, 0)
             else:
-                light2.set_color(1,0,0)
+                light2.set_color(1, 0, 0)
             lighttrans = rendering.Transform()
             light2.add_attr(lighttrans)
             lighttrans.set_translation(300+s*road_length,250)
             self.viewer.add_onetime(light2)
-        
-        
-        #dessiner les lignes verticales
-        top_line = rendering.Line((0,325), (screen_width,325))
-        top_line.set_color(0,0,0)
+
+        # dessiner les lignes verticales
+        top_line = rendering.Line((0, 325), (screen_width, 325))
+        top_line.set_color(0, 0, 0)
         self.viewer.add_onetime(top_line)
 
-        bottom_line = rendering.Line((0,275), (screen_width,275))
-        bottom_line.set_color(0,0,0)
+        bottom_line = rendering.Line((0, 275), (screen_width, 275))
+        bottom_line.set_color(0, 0, 0)
         self.viewer.add_onetime(bottom_line)
         
-        #dessiner les colonnes
+        # dessiner les colonnes
         for i in range(self.n_inter):
 
             left_line = rendering.Line((235+i*road_length,screen_height), (235+i*road_length,0))
-            left_line.set_color(0,0,0)
+            left_line.set_color(0, 0, 0)
             self.viewer.add_onetime(left_line)
 
-            right_line = rendering.Line((285+i*road_length,screen_height), (285+i*road_length,0))
-            right_line.set_color(0,0,0)
+            right_line = rendering.Line((285+i*road_length, screen_height), (285+i*road_length, 0))
+            right_line.set_color(0, 0, 0)
             self.viewer.add_onetime(right_line)
 
-        return self.viewer.render(return_rgb_array = False)
+        return self.viewer.render(return_rgb_array=False)
         
     def close(self):
         if self.viewer:
