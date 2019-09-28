@@ -19,7 +19,7 @@ class MLP(torch.nn.Module):
     is the last hidden layer, with a ReLU
     """
 
-    def __init__(self, observation_space, n_outputs, hiddens=[100, 100],**kwargs):
+    def __init__(self, observation_space, n_outputs, hiddens=[50, 50],**kwargs):
         super().__init__()
 
         if len(observation_space.shape) != 1:
@@ -34,7 +34,7 @@ class MLP(torch.nn.Module):
             n_inputs = hidden
 
         if n_outputs is not None:
-            layers.append(nn.Linear(hidden, n_outputs))
+            layers.append(nn.Linear(n_inputs, n_outputs))
 
         self.layers = nn.Sequential(*layers)
         self.layers.apply(lambda x: init_weights(x, 3))

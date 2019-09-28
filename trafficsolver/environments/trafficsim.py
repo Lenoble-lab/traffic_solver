@@ -48,7 +48,7 @@ class TrafficSim:
         self.MAX_TIMESTEPS = 50
         self.current_timestep = 0
 
-        self.TRAFFIC_INTENSITY = 0.2
+        self.TRAFFIC_INTENSITY = 0.5
 
         self.viewer = None
 
@@ -125,18 +125,18 @@ class TrafficSim:
                 done = True
 
         # generate random cars coming in the network
-        if np.random.uniform() < 2 * self.TRAFFIC_INTENSITY and self.network.h_cars[0, 0] == 0:
+        if np.random.uniform() < self.TRAFFIC_INTENSITY and self.network.h_cars[0, 0] == 0:
             self.network.h_cars[0, 0] = 1
 
         for i in range(self.network.n_inter):
-            if np.random.uniform() < self.TRAFFIC_INTENSITY and self.network.v_cars[i, 0] == 0:
+            if np.random.uniform() < self.TRAFFIC_INTENSITY / 2 and self.network.v_cars[i, 0] == 0:
                 self.network.v_cars[i, 0] = 1
 
         # final state
         state = np.concatenate((self.network.h_cars.reshape(self.network.n_inter * self.network.h_length),
                                self.network.v_cars.reshape(self.network.n_inter * self.network.v_length),
                                self.network.h_lights,
-                               self.network.h_lights))
+                               self.network.v_lights))
 
         return state, reward, done, {}
 
@@ -147,7 +147,7 @@ class TrafficSim:
         state = np.concatenate((self.network.h_cars.reshape(self.network.n_inter * self.network.h_length),
                                self.network.v_cars.reshape(self.network.n_inter * self.network.v_length),
                                self.network.h_lights,
-                               self.network.h_lights))
+                               self.network.v_lights))
 
         return state
 
