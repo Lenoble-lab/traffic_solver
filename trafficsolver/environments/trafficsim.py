@@ -145,7 +145,6 @@ class TrafficSim:
                                self.network.v_cars,
                                self.network.h_lights,
                                self.network.h_lights)
-
         return state
 
     def seed(self, seed):
@@ -168,10 +167,6 @@ class TrafficSim:
 
         if self.viewer is None:
             self.viewer = rendering.Viewer(screen_width, screen_height)
-        
-        tab_horiz = self.red_car_positions_last[:road_case]
-        tab_vertic = self.blue_car_positions_last[:road_case]
-            
 
 
         #flux horizontaux
