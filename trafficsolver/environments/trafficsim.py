@@ -104,20 +104,6 @@ class TrafficSim:
                 elif j < (self.network.h_length - 2) and self.network.h_cars[i, j] == 1 and self.network.h_cars[i, j+1] == 0:
                     self.network.h_cars[i, j] = 0
                     self.network.h_cars[i, j+1] = 1
-<<<<<<< HEAD
-                #time spend in front of the light
-                elif j == (self.network.h_length - 2) and self.network.h_lights[i] == 0  and self.network.h_cars[i, j] == 1: 
-                    self.h_time_spend[i] += 1
-
-                    if self.h_time_spend[i]==5:
-                        reward -= self.decrease_reward * self.h_time_spend[i]
-                        self.h_time_spend[i] = 0
-                #re-start time
-                elif j == (self.network.h_length - 2) and self.network.h_cars[i, j] == 0:
-                     reward -= self.decrease_reward * self.h_time_spend[i]
-                     self.h_time_spend[i] = 0
-=======
->>>>>>> 78f6ac6854b5f8e329b7251f2a8ea0e1d6f9634e
 
             # move vertical cars
             for j in reversed(range(self.network.v_length)):
@@ -133,7 +119,6 @@ class TrafficSim:
                 elif j < (self.network.v_length - 2) and self.network.v_cars[i, j] == 1 and self.network.v_cars[i, j+1] == 0:
                     self.network.v_cars[i, j] = 0
                     self.network.v_cars[i, j+1] = 1
-<<<<<<< HEAD
                 #time spend in front of th light (for the reward)
                 elif j == (self.network.v_length - 2) and self.network.v_lights[i] == 0  and self.network.v_cars[i, j] == 1: 
                     self.v_time_spend[i] += 1
@@ -145,11 +130,6 @@ class TrafficSim:
                 elif j == (self.network.h_length - 2) and self.network.v_cars[i, j] == 0:
                      reward -= self.decrease_reward * self.v_time_spend[i]
                      self.v_time_spend[i] = 0
-=======
-
-        # include standard deviation of number of cars per interval in reward
-        reward -= 0.1 * np.std(np.concatenate((np.sum(self.network.h_cars, axis=1), np.sum(self.network.v_cars, axis=1))))
->>>>>>> 78f6ac6854b5f8e329b7251f2a8ea0e1d6f9634e
 
         # look for collisions
         for i in range(self.network.n_inter):
