@@ -123,6 +123,7 @@ class TrafficSimSimple():
         else:
             self.car_state[1] = 0
 
+
         state = np.concatenate((self.blue_car_positions,
                                 self.red_car_positions,
                                 self.traffic_light_state))
