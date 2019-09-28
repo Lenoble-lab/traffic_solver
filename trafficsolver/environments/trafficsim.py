@@ -34,6 +34,10 @@ class TrafficSim:
         self.v_length = v_length
         self.network = NetworkStructure(n_inter, h_length, v_length)
 
+        self.decrease_reward = 0.1
+        self.v_time_spend = [0] * n_inter
+        self.h_time_spend = [0] * n_inter
+
         class ActionSpace:
             def __init__(self, n_actions):
                 self.n = n_actions
@@ -167,17 +171,18 @@ class TrafficSim:
         return
 
     def render(self):
-       
+        scale = 0.5
         road_length = 80 * self.network.h_length
         road_height = 80 * self.network.v_length
         screen_width = 1500
         screen_height = 800
-        carwidth = 30
-        carheight = 30
+        carwidth = int(scale *30)
+        carheight = int(scale*30)
+        
 
-        traffic_light_radius = 10
+        traffic_light_radius = int(scale * 10)
 
-        l, r, t, b = -carwidth/2, carwidth/2, carheight/2, -carheight/2
+        l, r, t, b = -carwidth//2, carwidth//2, carheight//2, -carheight//2
 
         if self.viewer is None:
             self.viewer = rendering.Viewer(screen_width, screen_height)
@@ -192,7 +197,7 @@ class TrafficSim:
 
                     cartrans = rendering.Transform()
                     car.add_attr(cartrans)
-                    cartrans.set_translation(45 + 80*(i+1) + s*road_length, road_height-20)
+                    cartrans.set_translation(int(scale*(45 + 80*(i+1) + s*road_length)), int(scale*(road_height-20)))
 
                     self.viewer.add_onetime(car)
 
@@ -205,7 +210,7 @@ class TrafficSim:
 
                     cartrans = rendering.Transform()
                     car.add_attr(cartrans)
-                    cartrans.set_translation(45+road_length+road_length*s, 60 + 80*i)
+                    cartrans.set_translation(int(scale*(45+road_length+road_length*s)), int(scale*(60 + 80*i)))
 
                     self.viewer.add_onetime(car)
         
@@ -218,7 +223,7 @@ class TrafficSim:
                 light1.set_color(0, 1, 0)
             lighttrans = rendering.Transform()
             light1.add_attr(lighttrans)
-            lighttrans.set_translation((s+1)*road_length, 25+road_height)
+            lighttrans.set_translation(int(scale*((s+1)*road_length)), int(scale*(25+road_height)))
             self.viewer.add_onetime(light1)
 
             light2 = rendering.make_circle(traffic_light_radius)
@@ -228,26 +233,26 @@ class TrafficSim:
                 light2.set_color(0, 1, 0)
             lighttrans = rendering.Transform()
             light2.add_attr(lighttrans)
-            lighttrans.set_translation(90+(s+1)*road_length, road_height-65)
+            lighttrans.set_translation(int(scale*(90+(s+1)*road_length)), int(scale*(road_height-65)))
             self.viewer.add_onetime(light2)
 
         # dessiner les lignes horizontales
-        top_line = rendering.Line((0, 5+road_height), (screen_width, 5+road_height))
+        top_line = rendering.Line((0, int(scale*(5+road_height))), (screen_width, int(scale*(5+road_height))))
         top_line.set_color(0, 0, 0)
         self.viewer.add_onetime(top_line)
 
-        bottom_line = rendering.Line((0, road_height-45), (screen_width, road_height-45))
+        bottom_line = rendering.Line((0, int(scale*(road_height-45))), (screen_width, int(scale*(road_height-45))))
         bottom_line.set_color(0, 0, 0)
         self.viewer.add_onetime(bottom_line)
         
         # dessiner les colonnes
         for s in range(self.n_inter):
 
-            left_line = rendering.Line((20+(s+1)*road_length, screen_height), (20+(s+1)*road_length, 0))
+            left_line = rendering.Line((int(scale*((20+(s+1)*road_length))), screen_height), (int(scale*(20+(s+1)*road_length)), 0))
             left_line.set_color(0, 0, 0)
             self.viewer.add_onetime(left_line)
 
-            right_line = rendering.Line((70+(s+1)*road_length, screen_height), (70+(s+1)*road_length, 0))
+            right_line = rendering.Line((int(scale*((70+(s+1)*road_length))), screen_height), (int(scale*(70+(s+1)*road_length)), 0))
             right_line.set_color(0, 0, 0)
             self.viewer.add_onetime(right_line)
 
