@@ -41,7 +41,6 @@ class DQN:
     ):
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
         self.replay_start_size = replay_start_size
         self.replay_buffer_size = replay_buffer_size
         self.gamma = gamma
