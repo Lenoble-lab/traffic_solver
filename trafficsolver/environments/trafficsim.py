@@ -10,9 +10,27 @@ import environments.rendering as rendering
 import copy
 
 
+class NetworkStructure:
+
+    def __init__(self, n_inter, h_length, v_length):
+
+        self.n_inter = n_inter
+        self.h_length = h_length
+        self.v_length = v_length
+
+        self.h_lights = np.zeros(self.n_inter)
+        self.v_lights = np.zeros(self.n_inter)
+
+        self.h_cars = np.zeros((self.n_inter, self.h_length))
+        self.v_cars = np.zeros((self.n_inter, self.v_length))
+
+
 class TrafficSim:
 
-    def __init__(self):
+    def __init__(self, network):
+
+        assert isinstance(network, NetworkStructure)
+        self.network = network
 
         class ActionSpace:
             def __init__(self, n_actions):
@@ -22,8 +40,8 @@ class TrafficSim:
             def __init__(self, n_features):
                 self.shape = [n_features]
 
-        self.action_space = ActionSpace(2)
-        self.observation_space = ObservationSpace(4)
+        self.action_space = ActionSpace(4 * self.network.n_inter)
+        self.observation_space = ObservationSpace(self.network.n_inter * (self.network.h_length + self.network.v_length + 2))
 
         self.viewer = None
 
