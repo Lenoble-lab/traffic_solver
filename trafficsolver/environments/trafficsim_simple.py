@@ -14,12 +14,12 @@ class TrafficSimSimple():
             def __init__(self,n_features): 
                 self.shape = [n_features]
 
-        self.action_space = action_space(2)
-        self.observation_space = observation_space(4)
-
         self.GRID_SHAPE = (5,7)
         self.TRAFFIC_INTENSITY = 0.3
         self.MAX_TIMESTEPS = 50
+
+        self.action_space = action_space(4)
+        self.observation_space = observation_space(2*self.GRID_SHAPE[1] + 2)
 
         self.current_timestep = 0
 
@@ -45,7 +45,18 @@ class TrafficSimSimple():
             done = True
 
         #Change state of traffic light chosen by action
-        self.traffic_light_state[action] = (1 - self.traffic_light_state[action])
+        if action == 0:
+            self.traffic_light_state[0] = 0
+            self.traffic_light_state[1] = 0
+        elif action == 1:
+            self.traffic_light_state[0] = 1
+            self.traffic_light_state[1] = 0
+        elif action == 2:
+            self.traffic_light_state[0] = 0
+            self.traffic_light_state[1] = 1
+        else:
+            self.traffic_light_state[0] = 1
+            self.traffic_light_state[1] = 1
 
         self.red_car_positions_last = copy.deepcopy(self.red_car_positions) #For rendering purposes only
         self.blue_car_positions_last = copy.deepcopy(self.blue_car_positions) #For rendering purposes only
@@ -112,7 +123,9 @@ class TrafficSimSimple():
         else:
             self.car_state[1] = 0
 
-        state = np.concatenate((self.car_state,self.traffic_light_state))
+        state = np.concatenate((self.blue_car_positions,
+                                self.red_car_positions,
+                                self.traffic_light_state))
 
         return state, reward, done, {}
 
@@ -128,7 +141,9 @@ class TrafficSimSimple():
         self.traffic_light_old_state = np.zeros(2)
         self.car_state = np.zeros(2)
 
-        state = np.concatenate((self.car_state,self.traffic_light_state))
+        state = np.concatenate((self.blue_car_positions,
+                                self.red_car_positions,
+                                self.traffic_light_state))
 
         return state
 
