@@ -169,7 +169,7 @@ class TrafficSim:
         # flux horizontaux
         for s in range(self.n_inter):
             for i in range(self.h_length):
-                if self.h_cars[s][i] == 1:
+                if self.network.h_cars[s][i] == 1:
 
                     car = rendering.FilledPolygon([(l, b), (l, t), (r, t), (r, b)])
                     car.set_color(1, 0, 0)
@@ -183,7 +183,7 @@ class TrafficSim:
         # flux verticaux
         for s in range(self.n_inter):
             for i in range(self.v_length):
-                if self.v_cars[s][i] == 1:
+                if self.network.v_cars[s][i] == 1:
                     car = rendering.FilledPolygon([(l, b), (l, t), (r, t), (r, b)])
                     car.set_color(0,0.3*s,0.2*s)
 
@@ -196,7 +196,7 @@ class TrafficSim:
         # traffic light
         for s in range(self.n_inter):
             light1 = rendering.make_circle(traffic_light_radius)
-            if self.h_lights[s] == 0:
+            if self.network.h_lights[s] == 0:
                 light1.set_color(0, 1, 0)
             else:
                 light1.set_color(1, 0, 0)
@@ -206,7 +206,7 @@ class TrafficSim:
             self.viewer.add_onetime(light1)
 
             light2 = rendering.make_circle(traffic_light_radius)
-            if self.v_lights == 0:
+            if self.network.v_lights[s] == 0:
                 light2.set_color(0, 1, 0)
             else:
                 light2.set_color(1, 0, 0)
