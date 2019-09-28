@@ -93,8 +93,7 @@ class TrafficSim:
                 if j == (self.network.h_length - 1) and self.network.h_cars[i, j] == 1:
                     self.network.h_cars[i, j] = 0
                     # reward if car leaves network
-                    if i == (self.network.n_inter - 1):
-                        reward += 1
+                    
                     # if not last interval, go to next
                     if i < (self.network.n_inter - 1):
                         if self.network.h_cars[i+1, 0] == 0:
@@ -104,6 +103,7 @@ class TrafficSim:
                 # car before last moves only if light is green
                 elif j == (self.network.h_length - 2) and self.network.h_lights[i] == 1 and self.network.h_cars[i, j] == 1 and self.network.h_cars[i, j+1] == 0:
                     self.network.h_cars[i, j] = 0
+                    reward += 10
                     self.network.h_cars[i, j+1] = 1
                 elif j < (self.network.h_length - 2) and self.network.h_cars[i, j] == 1 and self.network.h_cars[i, j+1] == 0:
                     self.network.h_cars[i, j] = 0
@@ -112,6 +112,9 @@ class TrafficSim:
                 elif j == (self.network.h_length - 2) and self.network.h_lights[i] == 0  and self.network.h_cars[i, j] == 1: 
                     self.h_time_spend[i] += 1
 
+                    if self.h_time_spend[i]==5:
+                        reward -= self.decrease_reward * self.h_time_spend[i]
+                        self.h_time_spend[i] = 0
                 #re-start time
                 elif j == (self.network.h_length - 2) and self.network.h_cars[i, j] == 0:
                      reward -= self.decrease_reward * self.h_time_spend[i]
@@ -134,6 +137,10 @@ class TrafficSim:
                 #time spend in front of th light (for the reward)
                 elif j == (self.network.v_length - 2) and self.network.v_lights[i] == 0  and self.network.v_cars[i, j] == 1: 
                     self.v_time_spend[i] += 1
+
+                    if self.v_time_spend[i]==5:
+                        reward -= self.decrease_reward * self.v_time_spend[i]
+                        self.v_time_spend[i] = 0
                 #restart time if there is no one
                 elif j == (self.network.h_length - 2) and self.network.v_cars[i, j] == 0:
                      reward -= self.decrease_reward * self.v_time_spend[i]
