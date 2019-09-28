@@ -19,7 +19,7 @@ from environments.cartpole import Cartpole
 
 env = Cartpole()
 
-nb_steps = 10000
+nb_steps = 20000
 
 agent = DQN( env,
                  MLP,
