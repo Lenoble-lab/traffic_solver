@@ -33,11 +33,6 @@ class TrafficSim:
         self.h_length = h_length
         self.v_length = v_length
         self.network = NetworkStructure(n_inter, h_length, v_length)
-    
-        self.h_time_spend = [0] * n_inter
-        self.v_time_spend = [0] * n_inter
-
-        self.decrease_reward = 0.01
 
         class ActionSpace:
             def __init__(self, n_actions):
@@ -53,7 +48,7 @@ class TrafficSim:
         self.MAX_TIMESTEPS = 50
         self.current_timestep = 0
 
-        self.TRAFFIC_INTENSITY = 0.5
+        self.TRAFFIC_INTENSITY = 0.8
 
         self.viewer = None
 
@@ -98,6 +93,7 @@ class TrafficSim:
                     if i < (self.network.n_inter - 1):
                         if self.network.h_cars[i+1, 0] == 0:
                             self.network.h_cars[i+1, 0] = 1
+                            reward += 1
                         else:
                             self.network.h_cars[i, j] = 1
                 # car before last moves only if light is green
@@ -108,6 +104,7 @@ class TrafficSim:
                 elif j < (self.network.h_length - 2) and self.network.h_cars[i, j] == 1 and self.network.h_cars[i, j+1] == 0:
                     self.network.h_cars[i, j] = 0
                     self.network.h_cars[i, j+1] = 1
+<<<<<<< HEAD
                 #time spend in front of the light
                 elif j == (self.network.h_length - 2) and self.network.h_lights[i] == 0  and self.network.h_cars[i, j] == 1: 
                     self.h_time_spend[i] += 1
@@ -119,6 +116,8 @@ class TrafficSim:
                 elif j == (self.network.h_length - 2) and self.network.h_cars[i, j] == 0:
                      reward -= self.decrease_reward * self.h_time_spend[i]
                      self.h_time_spend[i] = 0
+=======
+>>>>>>> 78f6ac6854b5f8e329b7251f2a8ea0e1d6f9634e
 
             # move vertical cars
             for j in reversed(range(self.network.v_length)):
@@ -134,6 +133,7 @@ class TrafficSim:
                 elif j < (self.network.v_length - 2) and self.network.v_cars[i, j] == 1 and self.network.v_cars[i, j+1] == 0:
                     self.network.v_cars[i, j] = 0
                     self.network.v_cars[i, j+1] = 1
+<<<<<<< HEAD
                 #time spend in front of th light (for the reward)
                 elif j == (self.network.v_length - 2) and self.network.v_lights[i] == 0  and self.network.v_cars[i, j] == 1: 
                     self.v_time_spend[i] += 1
@@ -145,6 +145,11 @@ class TrafficSim:
                 elif j == (self.network.h_length - 2) and self.network.v_cars[i, j] == 0:
                      reward -= self.decrease_reward * self.v_time_spend[i]
                      self.v_time_spend[i] = 0
+=======
+
+        # include standard deviation of number of cars per interval in reward
+        reward -= 0.1 * np.std(np.concatenate((np.sum(self.network.h_cars, axis=1), np.sum(self.network.v_cars, axis=1))))
+>>>>>>> 78f6ac6854b5f8e329b7251f2a8ea0e1d6f9634e
 
         # look for collisions
         for i in range(self.network.n_inter):
