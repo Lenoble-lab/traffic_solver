@@ -17,7 +17,7 @@ from algorithm.mlp import MLP
 from environments.trafficsim import TrafficSim
 
 
-env = TrafficSim(2, 4, 4)
+env = TrafficSim(3, 6, 6)
 
 nb_steps = 20000
 

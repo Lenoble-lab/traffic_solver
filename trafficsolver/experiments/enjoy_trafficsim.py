@@ -16,7 +16,7 @@ from algorithm.dqn import DQN
 from algorithm.mlp import MLP
 from environments.trafficsim import TrafficSim
 
-env = TrafficSim(2, 4, 4)
+env = TrafficSim(3, 6, 6)
 
 agent = DQN(env, MLP)
 
@@ -28,7 +28,7 @@ for i in range(10000):
     action = agent.predict(torch.FloatTensor(obs))
     obs, rew, done, info = env.step(action)
     env.render()
-    time.sleep(0.5)
+    time.sleep(1)
     returns += rew
     if done:
         obs = env.reset()
