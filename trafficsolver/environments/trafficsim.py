@@ -177,7 +177,7 @@ class TrafficSim:
     def render(self):
        
         road_length = 80 * self.network.h_length
-        road_height = 80 * (self.network.v_length-4)
+        road_height = 80 * self.network.v_length
         screen_width = 1500
         screen_height = 800
         carwidth = 30
@@ -200,7 +200,7 @@ class TrafficSim:
 
                     cartrans = rendering.Transform()
                     car.add_attr(cartrans)
-                    cartrans.set_translation(20 + 80*i + s*road_length, 300+road_height)
+                    cartrans.set_translation(45 + 80*(i+1) + s*road_length, road_height-20)
 
                     self.viewer.add_onetime(car)
 
@@ -213,7 +213,7 @@ class TrafficSim:
 
                     cartrans = rendering.Transform()
                     car.add_attr(cartrans)
-                    cartrans.set_translation(260+road_length*s, 60 + 80*i)
+                    cartrans.set_translation(45+road_length+road_length*s, 60 + 80*i)
 
                     self.viewer.add_onetime(car)
         
@@ -226,7 +226,7 @@ class TrafficSim:
                 light1.set_color(0, 1, 0)
             lighttrans = rendering.Transform()
             light1.add_attr(lighttrans)
-            lighttrans.set_translation(220+s*road_length, 350+road_height)
+            lighttrans.set_translation((s+1)*road_length, 25+road_height)
             self.viewer.add_onetime(light1)
 
             light2 = rendering.make_circle(traffic_light_radius)
@@ -236,26 +236,26 @@ class TrafficSim:
                 light2.set_color(0, 1, 0)
             lighttrans = rendering.Transform()
             light2.add_attr(lighttrans)
-            lighttrans.set_translation(300+s*road_length, 250+road_height)
+            lighttrans.set_translation(90+(s+1)*road_length, road_height-65)
             self.viewer.add_onetime(light2)
 
         # dessiner les lignes horizontales
-        top_line = rendering.Line((0, 325+road_height), (screen_width, 325+road_height))
+        top_line = rendering.Line((0, 5+road_height), (screen_width, 5+road_height))
         top_line.set_color(0, 0, 0)
         self.viewer.add_onetime(top_line)
 
-        bottom_line = rendering.Line((0, 275+road_height), (screen_width, 275+road_height))
+        bottom_line = rendering.Line((0, road_height-45), (screen_width, road_height-45))
         bottom_line.set_color(0, 0, 0)
         self.viewer.add_onetime(bottom_line)
         
         # dessiner les colonnes
-        for i in range(self.n_inter):
+        for s in range(self.n_inter):
 
-            left_line = rendering.Line((235+i*road_length, screen_height), (235+i*road_length, 0))
+            left_line = rendering.Line((20+(s+1)*road_length, screen_height), (20+(s+1)*road_length, 0))
             left_line.set_color(0, 0, 0)
             self.viewer.add_onetime(left_line)
 
-            right_line = rendering.Line((285+i*road_length, screen_height), (285+i*road_length, 0))
+            right_line = rendering.Line((70+(s+1)*road_length, screen_height), (70+(s+1)*road_length, 0))
             right_line.set_color(0, 0, 0)
             self.viewer.add_onetime(right_line)
 
