@@ -37,7 +37,7 @@ class TrafficSim:
         self.h_time_spend = [0] * n_inter
         self.v_time_spend = [0] * n_inter
 
-        self.decrease_reward = 0.01
+        self.decrease_reward = 0.1
 
         class ActionSpace:
             def __init__(self, n_actions):
@@ -108,14 +108,14 @@ class TrafficSim:
                 elif j < (self.network.h_length - 2) and self.network.h_cars[i, j] == 1 and self.network.h_cars[i, j+1] == 0:
                     self.network.h_cars[i, j] = 0
                     self.network.h_cars[i, j+1] = 1
-                #time spend in front of the light
-                elif j == (self.network.h_length - 2) and self.network.h_lights[i] == 0  and self.network.h_cars[i, j] == 1: 
+                # time spend in front of the light
+                elif j == (self.network.h_length - 2) and self.network.h_lights[i] == 0 and self.network.h_cars[i, j] == 1:
                     self.h_time_spend[i] += 1
 
-                #re-start time
+                # re-start time
                 elif j == (self.network.h_length - 2) and self.network.h_cars[i, j] == 0:
-                     reward -= self.decrease_reward * self.h_time_spend[i]
-                     self.h_time_spend[i] = 0
+                    reward -= self.decrease_reward * self.h_time_spend[i]
+                    self.h_time_spend[i] = 0
 
             # move vertical cars
             for j in reversed(range(self.network.v_length)):
@@ -131,13 +131,13 @@ class TrafficSim:
                 elif j < (self.network.v_length - 2) and self.network.v_cars[i, j] == 1 and self.network.v_cars[i, j+1] == 0:
                     self.network.v_cars[i, j] = 0
                     self.network.v_cars[i, j+1] = 1
-                #time spend in front of th light (for the reward)
+                # time spend in front of th light (for the reward)
                 elif j == (self.network.v_length - 2) and self.network.v_lights[i] == 0  and self.network.v_cars[i, j] == 1: 
                     self.v_time_spend[i] += 1
-                #restart time if there is no one
+                # restart time if there is no one
                 elif j == (self.network.h_length - 2) and self.network.v_cars[i, j] == 0:
-                     reward -= self.decrease_reward * self.v_time_spend[i]
-                     self.v_time_spend[i] = 0
+                    reward -= self.decrease_reward * self.v_time_spend[i]
+                    self.v_time_spend[i] = 0
 
         # look for collisions
         for i in range(self.network.n_inter):
