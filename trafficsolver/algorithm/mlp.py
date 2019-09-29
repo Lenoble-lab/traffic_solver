@@ -19,7 +19,7 @@ class MLP(torch.nn.Module):
     is the last hidden layer, with a ReLU
     """
 
-    def __init__(self, observation_space, n_outputs, hiddens=[100, 100],**kwargs):
+    def __init__(self, observation_space, n_outputs, hiddens=[1000, 1000],**kwargs):
         super().__init__()
 
         if len(observation_space.shape) != 1:
