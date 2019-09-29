@@ -6,7 +6,7 @@ Make your own traffic simulator in python and use reinforcement learning to opti
 
 The objective is to formulate traffic control as a reinforcement learning problem, and implement a traffic simulator that an algorithm we provide can then solve. You can use this to explore the advantages and disadvantages of RL, and consider the challenges in deploying this technology in the real world. 
 
-#Our personnal work
+# Our personnal work
 
 We create an interface with n_inter intersections, you can modified this numbrer and then train the network by running the next command. 
 
