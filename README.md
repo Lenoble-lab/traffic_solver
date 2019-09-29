@@ -6,6 +6,10 @@ Make your own traffic simulator in python and use reinforcement learning to opti
 
 The objective is to formulate traffic control as a reinforcement learning problem, and implement a traffic simulator that an algorithm we provide can then solve. You can use this to explore the advantages and disadvantages of RL, and consider the challenges in deploying this technology in the real world. 
 
+#Our personnal work
+
+We create an interface with n_inter intersections, you can modified this numbrer and then train the network by running the next command. 
+
 # Contents of this repo
 
 We provide an implementation of the Deep Q Networks algorithm [1] in the algorithm folder, which you shouldn't really have to modify. We also provide two examples of RL environments in the environments folder: the classic control task Cartpole [2] and a very basic implementation of traffic simulation, with cars approaching a single traffic-light controlled intersection. We also provide a blank template for you to create your own simulation: the trafficsim.py file in the environments folder.
